@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { learnArticles } from "@/lib/data";
+import { llmArticles } from "@/lib/data";
 import ContentCard from "@/components/ContentCard";
 
 const difficulties = ["全部", "初级", "中级", "高级"] as const;
 
-export default function LearnPage() {
+export default function LlmPage() {
   const [activeDiff, setActiveDiff] = useState<string>("全部");
 
   const filtered = activeDiff === "全部"
-    ? learnArticles
-    : learnArticles.filter((a) => a.difficulty === activeDiff);
+    ? llmArticles
+    : llmArticles.filter((a) => a.difficulty === activeDiff);
 
   return (
     <>
@@ -19,14 +19,14 @@ export default function LearnPage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center rounded-full border border-gold-500/30 bg-gold-500/10 px-3 py-1 text-xs font-medium text-gold-300">
-              大众学堂
+              金融大模型
             </span>
             <h1 className="mt-6 text-3xl font-bold text-white sm:text-4xl">
-              AI 让投资更聪明
+              选对模型，用对模型
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-navy-200">
-              无论你是投资新手还是老手，AI 都能帮你做出更明智的决策。
-              从基础入门到高级策略，一步步打造你的 AI 投资工具箱。
+              从模型全景、选型框架到评测方法，深入理解 DeepSeek、Claude、GPT 等
+              大模型在金融场景的能力边界与最佳实践。
             </p>
           </div>
         </div>
@@ -36,7 +36,7 @@ export default function LearnPage() {
         {/* Filter */}
         <div className="mb-8 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">
-            全部课程
+            全部文章
             <span className="ml-2 text-sm font-normal text-navy-400">({filtered.length})</span>
           </h2>
           <div className="flex gap-2">
@@ -64,7 +64,7 @@ export default function LearnPage() {
               title={article.title}
               desc={article.description}
               difficulty={article.difficulty}
-              href={`/learn/${article.slug}`}
+              href={`/llm/${article.slug}`}
             />
           ))}
         </div>

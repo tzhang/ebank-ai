@@ -12,11 +12,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "ebank.ai — AI 时代的金融知识平台",
+    default: "ebank.ai - 金融大模型与 Agent Harness 平台",
     template: "%s | ebank.ai",
   },
   description:
-    "AI 时代金融知识平台：帮助大众利用大模型和智能体投资理财，赋能金融从业者学习 AI 工具、共享 Skills 与 MCP。",
+    "ebank.ai 聚焦金融大模型与 Agent Harness：金融大模型的选型与评测，Claude Code、Codex 等智能体运行框架的金融实战，以及 Skills 与 MCP 技能生态。",
 };
 
 export default function RootLayout({

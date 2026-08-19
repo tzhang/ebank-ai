@@ -15,15 +15,15 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-xs leading-relaxed text-navy-300">
-              AI 时代金融知识平台 — 让每个人都能借助 AI 更好地投资、管理财富。
+              金融大模型与 Agent Harness 平台 - 选对模型，用对框架，让大模型真正服务金融。
             </p>
           </div>
 
           <div>
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-navy-300">内容</h3>
             <ul className="space-y-2">
-              <li><Link href="/learn" className="text-sm text-navy-200 transition-colors hover:text-gold-300">大众学堂</Link></li>
-              <li><Link href="/pro" className="text-sm text-navy-200 transition-colors hover:text-gold-300">专业人士</Link></li>
+              <li><Link href="/llm" className="text-sm text-navy-200 transition-colors hover:text-gold-300">金融大模型</Link></li>
+              <li><Link href="/harness" className="text-sm text-navy-200 transition-colors hover:text-gold-300">Agent Harness</Link></li>
               <li><Link href="/skills" className="text-sm text-navy-200 transition-colors hover:text-gold-300">技能库</Link></li>
             </ul>
           </div>

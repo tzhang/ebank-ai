@@ -2,8 +2,8 @@
 // ebank.ai — Centralized Content Data Layer
 // ============================================================
 
-// -------- 大众学堂 — 文章 --------
-export interface LearnArticle {
+// -------- 金融大模型 - 文章 --------
+export interface Article {
   slug: string;
   title: string;
   description: string;
@@ -15,7 +15,39 @@ export interface LearnArticle {
   sections: { heading: string; body: string }[];
 }
 
-export const learnArticles: LearnArticle[] = [
+export const llmArticles: Article[] = [
+  {
+    slug: "finllm-landscape",
+    title: "金融大模型全景：从通用模型到金融专用模型",
+    description: "一文看懂金融大模型版图：通用模型、金融专用模型各自的优劣与适用场景。",
+    difficulty: "初级",
+    category: "模型选型",
+    author: "ebank.ai 编辑部",
+    date: "2026-08-10",
+    readTime: "8 分钟",
+    sections: [
+      {
+        heading: "什么是金融大模型？",
+        body: "金融大模型（FinLLM）泛指在金融场景中使用的大语言模型。它可以是直接调用的通用模型（GPT、Claude、Gemini、DeepSeek、Qwen），也可以是在金融语料上继续预训练或微调的专用模型（如 BloombergGPT、FinGPT）。选型的核心问题不是「哪个模型最强」，而是「哪个模型在你的任务、数据合规要求和成本约束下表现最好」。",
+      },
+      {
+        heading: "通用模型在金融场景的表现",
+        body: "最新的旗舰通用模型已经具备很强的金融能力：财报解读、研报摘要、合规问答、代码生成都能达到可用水平。它们的优势是通用性强、迭代快、生态成熟；劣势是对中文金融术语和 A 股特有制度（涨跌停、北向资金、龙虎榜）的理解需要靠 Prompt 补充，且数据出境合规是机构使用的硬约束。",
+      },
+      {
+        heading: "金融专用模型的价值",
+        body: "金融专用模型通过在金融语料（研报、公告、法规、交易数据）上继续训练，提升领域词汇理解和专业推理能力。典型代表包括 BloombergGPT（金融 NLP 任务）、FinGPT（开源金融微调框架），以及国内多家银行、券商与科技公司联合推出的行业模型。专用模型适合私有化部署、特定任务深度优化的场景。",
+      },
+      {
+        heading: "国产模型与私有化部署",
+        body: "对国内金融机构而言，DeepSeek、Qwen 等开源国产模型是私有化部署的主流选择：许可证友好、中文能力强、可以在行内机房运行满足数据不出域要求。搭配 vLLM 等推理框架，可以用可控成本获得接近旗舰模型的金融分析能力。",
+      },
+      {
+        heading: "选型决策框架",
+        body: "建议按四个维度评估：任务匹配度（用真实业务样本测试而非通用榜单）、合规性（数据出境、模型备案）、总成本（API 费用或 GPU 投入 + 运维）、生态（是否被你的 Agent Harness 和 MCP 工具链支持）。模型选型不是一次性决策，建议每季度重新评测。",
+      },
+    ],
+  },
   {
     slug: "chatgpt-investment-intro",
     title: "ChatGPT 投资分析入门",
@@ -49,34 +81,6 @@ export const learnArticles: LearnArticle[] = [
     ],
   },
   {
-    slug: "ai-agent-dca",
-    title: "AI Agent 自动定投策略",
-    description: "配置智能体帮你自动执行定投计划，根据市场估值动态调整仓位。",
-    difficulty: "中级",
-    category: "智能体",
-    author: "QuantLee",
-    date: "2026-06-18",
-    readTime: "8 分钟",
-    sections: [
-      {
-        heading: "什么是 AI Agent 定投？",
-        body: "传统的定投是定期定额买入，而 AI Agent 定投可以引入更多的决策维度：市场估值（PE/PB 分位数）、技术指标（RSI、MACD）、宏观环境（利率、PMI）。Agent 会根据这些信号动态调整每次定投的金额，实现低估多买、高估少买的智能定投。",
-      },
-      {
-        heading: "搭建你的第一个定投 Agent",
-        body: "使用 Claude Code 或 Codex，你可以用自然语言描述策略逻辑。例如：创建一个定投智能体，每月 1 号检查沪深 300 的 PE 分位数，如果低于 30% 分位则双倍定投，高于 70% 分位则减半定投。AI 会帮你生成完整的策略代码。",
-      },
-      {
-        heading: "策略回测",
-        body: "在实盘之前，务必对策略进行历史回测。用 AI 生成回测代码，输入过去 5 年的市场数据和你的策略规则，观察策略表现。关注年化收益率、最大回撤、夏普比率等核心指标。",
-      },
-      {
-        heading: "风险控制",
-        body: "任何自动化策略都需要风控机制：设置单次最大买入金额、总仓位上限、止损触发器。Agent 应至少每周向你汇报一次运行状态和持仓情况。",
-      },
-    ],
-  },
-  {
     slug: "llm-industry-research",
     title: "用大模型做行业研究",
     description: "利用 Claude、DeepSeek 等大模型进行深度行业研究和竞品分析。",
@@ -101,6 +105,35 @@ export const learnArticles: LearnArticle[] = [
       {
         heading: "趋势分析与预测",
         body: "AI 可以帮助识别行业趋势信号。综合多篇研报和新闻，让 AI 提炼出当前行业最受关注的核心趋势，并为每个趋势给出支持证据和风险因素。",
+      },
+    ],
+  },
+
+  {
+    slug: "deepseek-quant-analysis",
+    title: "DeepSeek 量化分析",
+    description: "利用 DeepSeek 的开源模型能力，搭建本地量化分析和回测系统。",
+    difficulty: "高级",
+    category: "DeepSeek",
+    author: "QuantDev",
+    date: "2026-06-01",
+    readTime: "15 分钟",
+    sections: [
+      {
+        heading: "为什么选 DeepSeek？",
+        body: "DeepSeek 是国产大模型中在金融量化领域表现突出的模型。其 V3 和 R1 版本在数学推理、代码生成方面达到国际领先水平。而且 DeepSeek 支持本地部署，这对金融机构的数据安全要求至关重要。",
+      },
+      {
+        heading: "本地量化环境搭建",
+        body: "在本地或私有云部署 DeepSeek 模型，连接行情数据库和回测引擎。搭建要点：使用 vLLM 或 Ollama 进行模型推理加速；设计标准化的数据接口（行情、财务、因子数据）；建立回测结果的可视化看板。",
+      },
+      {
+        heading: "策略研究与代码生成",
+        body: "用自然语言描述策略思路：基于 RSI 和成交量确认的均值回归策略，入场条件是 RSI < 30 且成交量放大 50% 以上，出场条件是 RSI > 70。在沪深 300 成分股上做回测。DeepSeek 会生成完整的回测代码和结果分析。",
+      },
+      {
+        heading: "模型微调与优化",
+        body: "对于特定场景，可以对 DeepSeek 进行微调。例如，用量化研报和交易日志微调模型，使其更理解你的策略框架和风控偏好。微调后的模型在生成策略代码和交易建议时会更贴合你的需求。",
       },
     ],
   },
@@ -161,49 +194,73 @@ export const learnArticles: LearnArticle[] = [
     ],
   },
   {
-    slug: "agent-multi-account",
-    title: "智能体管理多账户投资",
-    description: "用 AI Agent 同时管理多个投资账户，实现再平衡和税收优化。",
+    slug: "finllm-evaluation",
+    title: "金融大模型评测：从榜单到自建基准",
+    description: "如何科学评测金融大模型：公开基准、幻觉率测试与自建业务评测集的完整方法。",
     difficulty: "高级",
-    category: "智能体",
-    author: "PortfolioPro",
-    date: "2026-05-20",
-    readTime: "10 分钟",
+    category: "评测方法",
+    author: "QuantDev",
+    date: "2026-08-14",
+    readTime: "12 分钟",
     sections: [
       {
-        heading: "多账户管理的痛点",
-        body: "很多投资者同时管理养老金账户、股票账户、基金账户、加密货币账户等多个投资账户。跨账户追踪收益、维持整体资产配置、进行税收优化——手动管理几乎不可能。AI Agent 可以成为你的跨账户投资管家。",
+        heading: "为什么通用榜单不够用？",
+        body: "MMLU、C-Eval 这类通用榜单无法反映金融场景的真实能力。一个模型可以在常识推理上得分很高，却在计算债券久期、解读合并利润表时频繁出错。金融评测必须围绕你自己的任务构建：财报分析、合规问答、研报摘要、风险提示，每个任务的失败成本完全不同。",
       },
       {
-        heading: "搭建多账户 Agent 架构",
-        body: "多账户 Agent 需要三层架构：数据层（连接各账户 API）、分析层（计算整体资产配置、收益表现）、执行层（生成再平衡建议）。每一层都可以用 AI 来驱动，关键在于数据安全和接口规范化。",
+        heading: "公开金融基准",
+        body: "目前可用的中文金融基准包括：FinEval（覆盖金融、经济、会计等学科考试题）、CFA 模拟题集、FinBen（综合金融能力评测）等。它们适合做初筛——快速淘汰明显不合格的模型，但题目静态、易被训练集污染，不能作为最终选型依据。",
       },
       {
-        heading: "税收优化策略",
-        body: "AI 可以自动识别税收优化机会：Tax-Loss Harvesting（卖出亏损资产抵扣收益）、账户类型优化（将高收益资产放在税收优惠账户中）、分红时间规划。Agent 会在每年年末生成税收优化报告。",
+        heading: "自建业务评测集",
+        body: "最佳实践是从真实业务中抽取 100-300 个样本，覆盖典型任务和边界情况：格式异常的财报、措辞模糊的条款、需要多步计算的问题。为每个样本准备标准答案或评分要点，用同一套 Prompt 对多个模型打分。评测集要定期更新，防止模型厂商针对公开样本过拟合。",
       },
       {
-        heading: "安全与隐私",
-        body: "多账户管理涉及大量敏感财务信息。建议：使用只读 API 密钥、本地部署 Agent 而非云端、定期审计 Agent 的操作日志、为 Agent 设置明确的权限边界。永远不要让 Agent 具有无限制的交易权限。",
+        heading: "幻觉率与数据可靠性",
+        body: "金融场景最致命的失败模式是幻觉——编造不存在的数据、法规条款或公司信息。评测时单独统计幻觉率：让模型输出带来源引用的答案，人工核对来源真实性。建议设置一票否决：关键数字无来源或来源错误率超过阈值的模型直接淘汰。",
+      },
+      {
+        heading: "成本与延迟评测",
+        body: "在生产环境中，准确率之外还要评测单位成本和响应延迟：每千次调用的费用、P95 响应时间、长文档处理的上下文成本。建议绘制「准确率-成本」散点图，找到边际收益开始急剧下降的拐点，那就是性价比最优的模型档位。",
       },
     ],
   },
 ];
 
-// -------- 专业人士 — 文章 --------
-export interface ProArticle {
-  slug: string;
-  title: string;
-  description: string;
-  difficulty: "初级" | "中级" | "高级";
-  category: string;
-  author: string;
-  date: string;
-  readTime: string;
-  sections: { heading: string; body: string }[];
-}
-
-export const proArticles: ProArticle[] = [
+// -------- Agent Harness - 文章 --------
+export const harnessArticles: Article[] = [
+  {
+    slug: "what-is-agent-harness",
+    title: "什么是 Agent Harness？",
+    description: "理解大模型落地的关键架构：模型之外的运行框架，决定 Agent 能做什么、不能做什么。",
+    difficulty: "初级",
+    category: "概念入门",
+    author: "ebank.ai 编辑部",
+    date: "2026-08-12",
+    readTime: "7 分钟",
+    sections: [
+      {
+        heading: "Harness 是什么？",
+        body: "大模型本身只是一个「输入文本、输出文本」的函数。让它真正完成工作——读文件、调 API、执行代码、多轮循环——需要一层运行环境。这层环境就叫 Harness（运行框架/脚手架）。Claude Code、Codex CLI、Cursor、OpenClaw 都是 Harness：模型是引擎，Harness 是整辆车。",
+      },
+      {
+        heading: "Harness 的核心组成",
+        body: "一个完整的 Agent Harness 通常包含五个部分：上下文管理（决定模型每一步能看到什么）、工具调用（文件系统、Shell、网络、MCP 服务）、权限控制（哪些操作需要人工确认）、执行循环（模型调用工具、观察结果、继续推理直到任务完成）、以及会话持久化（断点续跑、历史回放）。",
+      },
+      {
+        heading: "模型与 Harness 的分工",
+        body: "同一个模型装进不同的 Harness，表现可以差出数倍。模型决定推理上限，Harness 决定能力下限：工具质量差、上下文裁剪不当、权限配置过松，都会让强模型表现得像个实习生。金融场景尤其如此——数据接口的准确性远比模型参数量重要。",
+      },
+      {
+        heading: "为什么金融场景要关注 Harness？",
+        body: "金融任务对准确性、可审计性和数据安全的要求远高于一般场景。Harness 层决定了：敏感数据是否会泄露到模型厂商、Agent 是否能直接执行交易、每一步操作是否有日志可查。选对 Harness 并正确配置，比换更强的模型更能提升金融 Agent 的可靠性。",
+      },
+      {
+        heading: "从 Harness 到技能生态",
+        body: "现代 Harness 普遍支持 Skills（可复用的指令包）和 MCP（标准化工具接口）扩展。你可以把合规检查、财报分析等常用流程封装成 Skill，把行情、研报数据接成 MCP 服务，让任何兼容的 Harness 即插即用——这正是 ebank.ai 技能库在做的事。",
+      },
+    ],
+  },
   {
     slug: "claude-code-finance-workflow",
     title: "Claude Code 金融工作流",
@@ -289,86 +346,70 @@ export const proArticles: ProArticle[] = [
     ],
   },
   {
-    slug: "deepseek-quant-analysis",
-    title: "DeepSeek 量化分析",
-    description: "利用 DeepSeek 的开源模型能力，搭建本地量化分析和回测系统。",
-    difficulty: "高级",
-    category: "DeepSeek",
-    author: "QuantDev",
-    date: "2026-06-01",
-    readTime: "15 分钟",
-    sections: [
-      {
-        heading: "为什么选 DeepSeek？",
-        body: "DeepSeek 是国产大模型中在金融量化领域表现突出的模型。其 V3 和 R1 版本在数学推理、代码生成方面达到国际领先水平。而且 DeepSeek 支持本地部署，这对金融机构的数据安全要求至关重要。",
-      },
-      {
-        heading: "本地量化环境搭建",
-        body: "在本地或私有云部署 DeepSeek 模型，连接行情数据库和回测引擎。搭建要点：使用 vLLM 或 Ollama 进行模型推理加速；设计标准化的数据接口（行情、财务、因子数据）；建立回测结果的可视化看板。",
-      },
-      {
-        heading: "策略研究与代码生成",
-        body: "用自然语言描述策略思路：基于 RSI 和成交量确认的均值回归策略，入场条件是 RSI < 30 且成交量放大 50% 以上，出场条件是 RSI > 70。在沪深 300 成分股上做回测。DeepSeek 会生成完整的回测代码和结果分析。",
-      },
-      {
-        heading: "模型微调与优化",
-        body: "对于特定场景，可以对 DeepSeek 进行微调。例如，用量化研报和交易日志微调模型，使其更理解你的策略框架和风控偏好。微调后的模型在生成策略代码和交易建议时会更贴合你的需求。",
-      },
-    ],
-  },
-  {
-    slug: "ai-compliance-briefing",
-    title: "AI 监管合规简报自动化",
-    description: "用 AI Agent 每日自动抓取金融监管动态，生成结构化合规简报。",
+    slug: "harness-comparison",
+    title: "金融 Agent Harness 选型对比",
+    description: "Claude Code、Codex、Cursor、OpenClaw 四大主流 Harness 在金融场景的横向对比与选型建议。",
     difficulty: "中级",
-    category: "合规",
-    author: "ComplianceWang",
-    date: "2026-05-25",
-    readTime: "6 分钟",
+    category: "选型对比",
+    author: "ebank.ai 编辑部",
+    date: "2026-08-15",
+    readTime: "10 分钟",
     sections: [
       {
-        heading: "合规简报的需求与挑战",
-        body: "金融机构的合规部门需要每日跟踪监管动态：国家金融监管总局（NFRA）、人民银行（PBOC）、证监会（CSRC）等机构发布的每一份通知、办法、处罚决定都可能影响业务。人工跟踪的工作量巨大，且容易遗漏。",
+        heading: "对比维度",
+        body: "金融场景选 Harness 建议看五个维度：模型可换性（能否接入私有化模型）、MCP/Skills 生态（金融数据工具是否现成）、权限粒度（能否精确控制交易类操作）、审计能力（操作日志是否完整）、部署形态（云端 SaaS 还是本地 CLI）。不同团队的安全要求和工作流差异很大，没有万能答案。",
       },
       {
-        heading: "AI 扫描引擎搭建",
-        body: "构建一个合规扫描 Agent：每日定时访问监管机构官网，抓取最新公告。AI 对每份文档进行分类（政策法规、行政处罚、统计数据、风险提示），提取关键信息，并评估影响等级。",
+        heading: "Claude Code",
+        body: "Anthropic 官方 CLI Harness，长任务执行和工具编排能力强，MCP 支持完善，社区金融 Skills 丰富。适合深度研究型任务：财报批量分析、尽调报告生成。局限是默认绑定 Claude 模型，数据需要出境到 API，对合规要求极高的机构需要评估。",
       },
       {
-        heading: "结构化简报生成",
-        body: "Agent 将扫描结果整理为结构化简报：按监管机构分组、每条动态附带摘要和原文链接、标注对银行各业务部门的关联度。简报在每天 9:00 前通过企业微信或邮件推送。",
+        heading: "Codex CLI",
+        body: "OpenAI 的开源命令行 Harness，代码执行环境隔离（沙箱）做得好，支持配置自定义模型端点，对私有化部署友好。适合量化研究、回测脚本开发等代码密集型金融任务。Skills 生态正在快速成长。",
       },
       {
-        heading: "合规风险预警",
-        body: "当监管动态涉及银行当前业务时，Agent 自动发送风险预警。例如，如果新规涉及理财产品的销售规范，Agent 会在推送时标记涉及资管业务，建议 3 个工作日内完成合规评估。",
+        heading: "Cursor",
+        body: "IDE 形态的 Harness，图形界面降低了使用门槛，适合量化团队在编辑器内直接完成策略迭代。Tab 补全 + Agent 模式的组合对代码修改类任务效率极高。局限是重 GUI、不易集成到自动化流水线，权限配置粒度弱于 CLI 类工具。",
+      },
+      {
+        heading: "OpenClaw 等国产/开源方案",
+        body: "以 OpenClaw 为代表的国产开源 Harness 主打本地化和国产模型适配，可完全离线运行，满足数据不出域的监管要求。配套的中文金融 Skill 市场（A 股数据、龙虎榜、监管动态）对国内用户更友好。成熟度和文档相对国际产品仍有差距，适合有一定工程能力的团队。",
+      },
+      {
+        heading: "选型建议",
+        body: "个人投资者和研究人员：Claude Code 或 Cursor，生态最成熟、上手最快。量化团队：Codex CLI 或 Cursor，代码能力优先。银行、券商等强合规机构：开源 Harness + 私有化模型，把 Harness 当作基础设施自建审计和权限层。无论选哪个，都通过 MCP 标准化数据接口，保留未来切换的自由度。",
       },
     ],
   },
   {
-    slug: "finance-prompt-templates",
-    title: "金融行业 Prompt 模板库",
-    description: "精选 50+ 适用于银行、证券、保险等细分领域的 Prompt 模板。",
-    difficulty: "初级",
-    category: "资源",
-    author: "ebank.ai 编辑部",
-    date: "2026-05-18",
-    readTime: "5 分钟",
+    slug: "harness-security-compliance",
+    title: "金融 Agent Harness 的安全与合规",
+    description: "权限控制、沙箱隔离、审计日志：让 Agent 在金融场景安全落地的三道防线。",
+    difficulty: "高级",
+    category: "安全合规",
+    author: "SecurityGuru",
+    date: "2026-08-16",
+    readTime: "11 分钟",
     sections: [
       {
-        heading: "银行业的 Prompt 模板",
-        body: "信贷审批分析：请分析这份贷款申请，评估申请人的还款能力。考虑因素包括收入负债比、征信记录、行业风险、担保情况。输出审批建议、风险评级、建议贷款额度。",
+        heading: "金融场景的特殊风险",
+        body: "通用场景下 Agent 犯错的代价是多改几行代码；金融场景下可能是错发交易指令、泄露客户数据、生成违反监管要求的报告。因此金融 Agent Harness 的安全设计不是可选项，而是上线前提。核心思路：最小权限、纵深防御、全程可审计。",
       },
       {
-        heading: "证券业的 Prompt 模板",
-        body: "投资观点生成：根据市场数据和研究报告，生成本周的投资观点。需包含市场回顾、核心观点、推荐标的及理由、风险提示。请注明每项判断的依据和置信度。",
+        heading: "第一道防线：权限控制",
+        body: "把 Agent 的权限拆成读/写/执行三类，逐项配置：行情数据只读、财务文件读写限定目录、交易类 API 默认禁用。关键操作（下单、对外发送、删除数据）必须保留人工确认环节。定期审查权限清单，删除不再使用的授权——权限只增不减是安全腐化的开始。",
       },
       {
-        heading: "保险业的 Prompt 模板",
-        body: "理赔审核辅助：请审核这份理赔申请。检查保单有效性、出险情况与保单条款的匹配度、理赔金额计算是否准确、有无免责条款适用。标注任何异常点。",
+        heading: "第二道防线：沙箱与数据隔离",
+        body: "Agent 执行代码必须在隔离环境（容器/虚拟机）中运行，限制网络访问和文件系统范围。敏感数据分级处理：客户身份信息脱敏后再进入模型上下文；涉及未公开重大信息（内幕信息）的任务完全禁止使用云端模型。私有化部署 + 开源 Harness 是满足数据不出域要求的根本方案。",
       },
       {
-        heading: "跨领域通用模板",
-        body: "金融文档摘要：用 3-5 句话总结这份文档的核心内容，面向管理层阅读。包含背景、关键结论、影响、建议措施。每个模板都经过银行从业者的实际测试和优化。",
+        heading: "第三道防线：审计日志",
+        body: "完整记录每次会话的输入输出、调用的工具、读取的数据和执行的结果，日志不可篡改且保留期满足监管要求（通常五年以上）。为每个产出物建立溯源：这份报告由哪个模型、哪个 Skill、基于哪些数据生成——出现争议时能完整回放决策过程。",
+      },
+      {
+        heading: "合规落地清单",
+        body: "上线前逐项检查：算法备案与模型合规评估是否完成；个人信息处理是否获得授权并最小化采集；Agent 生成内容是否明确标注 AI 生成；人工复核环节是否嵌入关键流程；应急预案是否覆盖 Agent 失控场景（错误交易、批量外发）。建议把这份清单纳入变更管理流程，每次 Harness 或模型升级后重新过一遍。",
       },
     ],
   },
@@ -1053,15 +1094,15 @@ export interface CommunityTopic {
 }
 
 export const communityTopics: CommunityTopic[] = [
-  { id: "1", title: "如何用 AI Agent 做投资组合再平衡？", author: "QuantLee", time: "2小时前", replies: 12, views: 342, category: "问答", lastReply: "30分钟前" },
+  { id: "1", title: "Claude Code 和 Codex 在金融数据处理的实际体验对比", author: "QuantLee", time: "2小时前", replies: 14, views: 388, category: "讨论", lastReply: "30分钟前" },
   { id: "2", title: "分享：我用 Claude Code 写了个财报分析脚本", author: "FinanceDev", time: "5小时前", replies: 8, views: 287, category: "分享", lastReply: "1小时前" },
-  { id: "3", title: "国内银行部署 AI 智能体的合规难点讨论", author: "ComplianceWang", time: "1天前", replies: 23, views: 521, category: "讨论", lastReply: "2小时前", pinned: true },
+  { id: "3", title: "国内银行部署 AI Agent 的 Harness 选型与合规难点讨论", author: "ComplianceWang", time: "1天前", replies: 26, views: 592, category: "讨论", lastReply: "2小时前", pinned: true },
   { id: "4", title: "MCP 服务如何在内网环境下部署？", author: "ITSecZhang", time: "2天前", replies: 5, views: 189, category: "问答", lastReply: "12小时前" },
   { id: "5", title: "DeepSeek 在信用评估中的应用实践", author: "CreditAnalyst", time: "3天前", replies: 15, views: 403, category: "分享", lastReply: "1天前" },
-  { id: "6", title: "用 WorkBuddy 做会议纪要自动化的最佳实践", author: "OpsManager", time: "4天前", replies: 7, views: 256, category: "分享", lastReply: "2天前" },
+  { id: "6", title: "自建金融大模型评测集的经验：多少样本才够？", author: "QuantDev", time: "4天前", replies: 11, views: 276, category: "问答", lastReply: "1天前" },
   { id: "7", title: "Prompt 让大模型输出格式化金融数据", author: "DataEngineer", time: "5天前", replies: 19, views: 378, category: "讨论", lastReply: "2天前" },
   { id: "8", title: "推荐几个金融领域好用的 Codex Skill", author: "SkillHunter", time: "6天前", replies: 11, views: 298, category: "资源", lastReply: "3天前" },
-  { id: "9", title: "银行数据安全 vs AI 效率：如何平衡？", author: "SecurityGuru", time: "1周前", replies: 31, views: 612, category: "讨论", lastReply: "4天前", pinned: true },
+  { id: "9", title: "Agent 权限怎么管：交易类操作要不要完全禁用？", author: "SecurityGuru", time: "1周前", replies: 31, views: 612, category: "讨论", lastReply: "4天前", pinned: true },
   { id: "10", title: "用大模型做债券违约预测的尝试", author: "BondAnalyst", time: "1周前", replies: 9, views: 234, category: "分享", lastReply: "5天前" },
 ];
 

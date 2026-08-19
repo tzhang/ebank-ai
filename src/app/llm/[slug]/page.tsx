@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { learnArticles, type LearnArticle } from "@/lib/data";
+import { llmArticles } from "@/lib/data";
 import type { Metadata } from "next";
 
 interface Props {
@@ -8,19 +8,19 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return learnArticles.map((a) => ({ slug: a.slug }));
+  return llmArticles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = learnArticles.find((a) => a.slug === slug);
+  const article = llmArticles.find((a) => a.slug === slug);
   if (!article) return { title: "文章未找到" };
-  return { title: `${article.title} | 大众学堂`, description: article.description };
+  return { title: `${article.title} | 金融大模型`, description: article.description };
 }
 
-export default async function LearnArticlePage({ params }: Props) {
+export default async function LlmArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = learnArticles.find((a) => a.slug === slug);
+  const article = llmArticles.find((a) => a.slug === slug);
   if (!article) notFound();
 
   const diffColor =
@@ -37,13 +37,13 @@ export default async function LearnArticlePage({ params }: Props) {
       <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8">
           <Link
-            href="/learn"
+            href="/llm"
             className="inline-flex items-center text-sm text-navy-300 hover:text-gold-300 transition-colors"
           >
             <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            返回大众学堂
+            返回金融大模型
           </Link>
         </div>
 

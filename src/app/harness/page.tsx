@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { proArticles } from "@/lib/data";
+import { harnessArticles } from "@/lib/data";
 import ContentCard from "@/components/ContentCard";
 
-const categories = ["全部", ...new Set(proArticles.map((a) => a.category))];
+const categories = ["全部", ...new Set(harnessArticles.map((a) => a.category))];
 
-export default function ProPage() {
+export default function HarnessPage() {
   const [activeCat, setActiveCat] = useState("全部");
 
   const filtered = activeCat === "全部"
-    ? proArticles
-    : proArticles.filter((a) => a.category === activeCat);
+    ? harnessArticles
+    : harnessArticles.filter((a) => a.category === activeCat);
 
   return (
     <>
@@ -19,13 +19,14 @@ export default function ProPage() {
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <span className="inline-flex items-center rounded-full border border-navy-400/30 bg-navy-500/20 px-3 py-1 text-xs font-medium text-navy-200">
-              专业人士
+              Agent Harness
             </span>
             <h1 className="mt-6 text-3xl font-bold text-white sm:text-4xl">
-              用 AI 重塑金融工作流
+              让大模型真正干活
             </h1>
             <p className="mt-4 text-lg leading-relaxed text-navy-200">
-              面向银行、证券、保险、基金从业者。学习如何将 Claude Code、Codex、WorkBuddy、DeepSeek 等 AI 工具融入日常工作。
+              Harness 是驱动大模型的运行框架--Claude Code、Codex、Cursor、OpenClaw。
+              这里讲清楚概念、选型与金融场景的落地实战。
             </p>
           </div>
         </div>
@@ -61,7 +62,7 @@ export default function ProPage() {
               title={article.title}
               desc={article.description}
               difficulty={article.difficulty}
-              href={`/pro/${article.slug}`}
+              href={`/harness/${article.slug}`}
             />
           ))}
         </div>

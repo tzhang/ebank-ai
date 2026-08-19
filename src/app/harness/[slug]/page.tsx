@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { proArticles } from "@/lib/data";
+import { harnessArticles } from "@/lib/data";
 import type { Metadata } from "next";
 
 interface Props {
@@ -8,19 +8,19 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return proArticles.map((a) => ({ slug: a.slug }));
+  return harnessArticles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = proArticles.find((a) => a.slug === slug);
+  const article = harnessArticles.find((a) => a.slug === slug);
   if (!article) return { title: "文章未找到" };
-  return { title: `${article.title} | 专业人士`, description: article.description };
+  return { title: `${article.title} | Agent Harness`, description: article.description };
 }
 
-export default async function ProArticlePage({ params }: Props) {
+export default async function HarnessArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = proArticles.find((a) => a.slug === slug);
+  const article = harnessArticles.find((a) => a.slug === slug);
   if (!article) notFound();
 
   const diffColor =
@@ -37,13 +37,13 @@ export default async function ProArticlePage({ params }: Props) {
       <article className="mx-auto max-w-3xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="mb-8">
           <Link
-            href="/pro"
+            href="/harness"
             className="inline-flex items-center text-sm text-navy-300 hover:text-gold-300 transition-colors"
           >
             <svg className="mr-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
             </svg>
-            返回专业人士
+            返回 Agent Harness
           </Link>
         </div>
 
@@ -57,7 +57,9 @@ export default async function ProArticlePage({ params }: Props) {
             <span className="text-xs text-navy-400">{article.readTime}</span>
           </div>
 
-          <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl">{article.title}</h1>
+          <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
+            {article.title}
+          </h1>
 
           <div className="mt-4 flex items-center gap-4 text-sm text-navy-400">
             <span>{article.author}</span>

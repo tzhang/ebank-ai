@@ -19,28 +19,31 @@ export default function AboutPage() {
       <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="prose-custom space-y-6 text-navy-200">
           <p className="text-lg leading-relaxed">
-            ebank.ai 诞生于 AI 技术快速迭代的时代。我们相信，AI 将从根本上改变金融行业的面貌——从个人投资者的决策方式，到专业金融机构的运营效率。
+            ebank.ai 诞生于大模型走向金融生产环境的关键阶段。我们观察到：决定金融 AI
+            成败的，一半是模型本身，另一半是驱动模型的 Agent Harness
+            运行框架--权限、工具、审计与生态。本站聚焦这两件事。
           </p>
 
           <h2 className="mt-10 text-xl font-semibold text-white">我们的使命</h2>
           <p className="leading-relaxed">
-            让每个人都能借助 AI 的力量，更聪明地管理财富。同时，为金融从业者提供一个学习、交流和共创的 AI 社区。
+            帮助金融从业者和投资者看懂金融大模型、用好 Agent Harness。
+            选对模型，用对框架，让大模型真正服务金融业务，而不是停留在演示阶段。
           </p>
 
-          <h2 className="mt-10 text-xl font-semibold text-white">面向人群</h2>
+          <h2 className="mt-10 text-xl font-semibold text-white">我们关注什么</h2>
           <div className="grid gap-6 sm:grid-cols-2">
             <div className="rounded-xl border border-navy-600/50 bg-navy-800/50 p-5">
-              <h3 className="font-semibold text-white">大众投资者</h3>
+              <h3 className="font-semibold text-white">金融大模型</h3>
               <p className="mt-2 text-sm leading-relaxed text-navy-300">
-                想学习使用 AI 进行投资理财的个人投资者。
-                从入门到进阶，让 AI 成为你的投资助手。
+                GPT、Claude、DeepSeek、Qwen 及金融专用模型的能力评测、
+                选型框架与私有化部署实践。
               </p>
             </div>
             <div className="rounded-xl border border-navy-600/50 bg-navy-800/50 p-5">
-              <h3 className="font-semibold text-white">金融从业者</h3>
+              <h3 className="font-semibold text-white">Agent Harness</h3>
               <p className="mt-2 text-sm leading-relaxed text-navy-300">
-                银行、证券、保险、基金等机构的专业人士。
-                学习 AI 工具，共享实践技能，提升工作效率。
+                Claude Code、Codex、Cursor、OpenClaw 等运行框架在金融场景的
+                概念解读、选型对比与安全合规落地。
               </p>
             </div>
           </div>
@@ -48,24 +51,27 @@ export default function AboutPage() {
           <h2 className="mt-10 text-xl font-semibold text-white">平台特色</h2>
           <ul className="list-disc space-y-2 pl-5">
             <li className="leading-relaxed">
-              <strong className="text-gold-300">Skills 共享</strong> — 金融行业专属的 Codex / Claude Code Skills 仓库
+              <strong className="text-gold-300">模型评测</strong> - 金融大模型的选型框架、公开基准与自建评测集方法
             </li>
             <li className="leading-relaxed">
-              <strong className="text-gold-300">MCP 服务</strong> — 合规、分析、数据等金融场景的 MCP 配置
+              <strong className="text-gold-300">Harness 实战</strong> - Claude Code / Codex 等 Agent 框架的金融工作流与安全设计
             </li>
             <li className="leading-relaxed">
-              <strong className="text-gold-300">社区问答</strong> — 金融 AI 实践者的交流平台
+              <strong className="text-gold-300">Skills 共享</strong> - 金融行业专属的 Codex / Claude Code Skills 仓库
             </li>
             <li className="leading-relaxed">
-              <strong className="text-gold-300">实战教程</strong> — 覆盖 WorkBuddy、DeepSeek、Codex 等工具的实操指南
+              <strong className="text-gold-300">MCP 服务</strong> - 合规、分析、数据等金融场景的 MCP 配置
+            </li>
+            <li className="leading-relaxed">
+              <strong className="text-gold-300">社区问答</strong> - 金融 AI 实践者的交流平台
             </li>
           </ul>
 
           <div className="mt-12 rounded-xl border border-gold-500/20 bg-gold-500/5 p-8 text-center">
             <h2 className="text-xl font-bold text-white">加入我们</h2>
             <p className="mt-2 text-sm text-navy-300">
-              无论你是 AI 爱好者还是金融专业人士，ebank.ai 都欢迎你的加入。
-              一起探索 AI 在金融领域的无限可能。
+              无论你是大模型研究者、金融从业者还是量化开发者，
+              ebank.ai 都欢迎你的加入。一起探索金融大模型与 Agent Harness 的无限可能。
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
               <Link

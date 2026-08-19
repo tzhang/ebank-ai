@@ -6,8 +6,8 @@ import { useState } from "react";
 
 const navLinks = [
   { href: "/", label: "首页" },
-  { href: "/learn", label: "大众学堂" },
-  { href: "/pro", label: "专业人士" },
+  { href: "/llm", label: "金融大模型" },
+  { href: "/harness", label: "Agent Harness" },
   { href: "/skills", label: "技能库" },
   { href: "/community", label: "社区" },
   { href: "/about", label: "关于" },
