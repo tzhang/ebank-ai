@@ -10,6 +10,7 @@ import Markdown from "@/components/Markdown";
 import ReplyForm from "@/components/forum/ReplyForm";
 import ReplyActions from "@/components/forum/ReplyActions";
 import OwnerTopicControls from "@/components/forum/OwnerTopicControls";
+import ReportButton from "@/components/forum/ReportButton";
 import ViewTracker from "@/components/forum/ViewTracker";
 import LikeButton from "@/components/forum/LikeButton";
 
@@ -219,7 +220,10 @@ export default async function TopicDetailPage({
             initialCount={topic.likeCount}
             loggedIn={Boolean(user)}
           />
-          {isOwner && <OwnerTopicControls topicId={topic.id} />}
+          <div className="flex items-center gap-4">
+            {user && !isOwner && <ReportButton targetType="topic" targetId={topic.id} compact />}
+            {isOwner && <OwnerTopicControls topicId={topic.id} />}
+          </div>
         </div>
 
         {/* 正文 */}
@@ -245,9 +249,13 @@ export default async function TopicDetailPage({
                 <div className="mt-2 text-sm leading-relaxed text-navy-100">
                   <Markdown>{floor.content}</Markdown>
                 </div>
-                {user && floor.authorId === user.id && (
-                  <ReplyActions topicId={id} replyId={floor.id} initialContent={floor.content} />
-                )}
+                <div className="mt-2 flex items-center gap-4">
+                  {user && floor.authorId === user.id ? (
+                    <ReplyActions topicId={id} replyId={floor.id} initialContent={floor.content} />
+                  ) : user ? (
+                    <ReportButton targetType="reply" targetId={floor.id} compact />
+                  ) : null}
+                </div>
                 {kids.length > 0 && (
                   <div className="mt-3 space-y-3 rounded-lg border border-navy-700/50 bg-navy-900/40 p-3">
                     {kids.map((c) => (
@@ -259,8 +267,14 @@ export default async function TopicDetailPage({
                         <div className="mt-1 text-sm text-navy-200">
                           <Markdown>{c.content}</Markdown>
                         </div>
-                        {user && c.authorId === user.id && (
-                          <ReplyActions topicId={id} replyId={c.id} initialContent={c.content} />
+                        {user && (
+                          <div className="mt-1">
+                            {c.authorId === user.id ? (
+                              <ReplyActions topicId={id} replyId={c.id} initialContent={c.content} />
+                            ) : (
+                              <ReportButton targetType="reply" targetId={c.id} compact />
+                            )}
+                          </div>
                         )}
                       </div>
                     ))}

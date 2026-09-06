@@ -57,7 +57,7 @@ export async function createTopic(
   if (!CATEGORIES.includes(category)) {
     return { ok: false, status: 422, error: "分类不合法" };
   }
-  const hit = checkSensitive(title + "\n" + content);
+  const hit = await checkSensitive(title + "\n" + content);
   if (hit.blocked) {
     return { ok: false, status: 422, error: "内容包含违禁词,请修改后重试" };
   }
@@ -86,7 +86,7 @@ export async function createReply(
   if (content.length === 0 || content.length > REPLY_CONTENT_MAX) {
     return { ok: false, status: 422, error: `回复需为 1–${REPLY_CONTENT_MAX} 个字符` };
   }
-  const hit = checkSensitive(content);
+  const hit = await checkSensitive(content);
   if (hit.blocked) {
     return { ok: false, status: 422, error: "内容包含违禁词,请修改后重试" };
   }
@@ -165,7 +165,7 @@ export async function updateTopic(
     return { ok: false, status: 422, error: `正文需为 1–${TOPIC_CONTENT_MAX} 个字符` };
   }
   if (!CATEGORIES.includes(category)) return { ok: false, status: 422, error: "分类不合法" };
-  const hit = checkSensitive(title + "\n" + content);
+  const hit = await checkSensitive(title + "\n" + content);
   if (hit.blocked) return { ok: false, status: 422, error: "内容包含违禁词,请修改后重试" };
 
   const db = getDb();
@@ -218,7 +218,7 @@ export async function updateReply(
   if (content.length === 0 || content.length > REPLY_CONTENT_MAX) {
     return { ok: false, status: 422, error: `回复需为 1–${REPLY_CONTENT_MAX} 个字符` };
   }
-  const hit = checkSensitive(content);
+  const hit = await checkSensitive(content);
   if (hit.blocked) return { ok: false, status: 422, error: "内容包含违禁词,请修改后重试" };
 
   const db = getDb();

@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, integer, boolean, jsonb, primaryKey, index, check } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, integer, boolean, jsonb, primaryKey, index, check, uniqueIndex } from "drizzle-orm/pg-core";
 import { randomUUID } from "node:crypto";
 import { sql } from "drizzle-orm";
 
@@ -153,8 +153,15 @@ export const reports = pgTable(
     check("reports_target_type_check", sql`${t.targetType} in ('topic', 'reply')`),
     check("reports_status_check", sql`${t.status} in ('pending', 'resolved', 'dismissed')`),
     index("reports_queue_idx").on(t.status, t.createdAt), // 举报队列(ADM-122)
+    uniqueIndex("reports_reporter_target_unique").on(t.reporterId, t.targetType, t.targetId), // 每用户每内容一次
   ],
 );
+
+// 敏感词库(FRM-136):命中即拒;管理端维护在 ADM 相关 issue
+export const bannedWords = pgTable("banned_words", {
+  term: text("term").primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().default(sql`now()`),
+});
 
 export const auditLogs = pgTable(
   "audit_logs",
