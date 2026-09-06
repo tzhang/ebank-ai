@@ -84,3 +84,88 @@ body {
 .animate-stagger > *:nth-child(8) { animation-delay: 0.4s; }
 .animate-stagger > *:nth-child(9) { animation-delay: 0.45s; }
 .animate-stagger > *:nth-child(10) { animation-delay: 0.5s; }
+
+/* ============================================================
+   Markdown 正文渲染(社区话题/回复共用)—— 站点为深色海军蓝主题
+   ============================================================ */
+.md-body {
+  line-height: 1.85;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+  color: #d9e0ed;
+}
+.md-body > :first-child { margin-top: 0; }
+.md-body > :last-child { margin-bottom: 0; }
+.md-body p { margin: 0.7em 0; }
+.md-body h1, .md-body h2, .md-body h3, .md-body h4 {
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.4;
+  margin: 1.3em 0 0.5em;
+}
+.md-body h1 { font-size: 1.4em; }
+.md-body h2 { font-size: 1.25em; }
+.md-body h3 { font-size: 1.1em; }
+.md-body h4 { font-size: 1em; }
+.md-body ul, .md-body ol { padding-left: 1.6em; margin: 0.7em 0; }
+.md-body ul { list-style: disc; }
+.md-body ol { list-style: decimal; }
+.md-body li { margin: 0.25em 0; }
+.md-body a { color: #f9cd4e; text-decoration: underline; text-underline-offset: 2px; }
+.md-body blockquote {
+  margin: 0.8em 0;
+  padding: 0.2em 1em;
+  border-left: 3px solid rgba(212, 161, 30, 0.45);
+  color: #7d96c4;
+}
+.md-body code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(7, 13, 25, 0.8);
+  border: 1px solid rgba(80, 111, 168, 0.35);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+.md-body pre {
+  margin: 0.8em 0;
+  padding: 0.9em 1em;
+  background: rgba(7, 13, 25, 0.8);
+  border: 1px solid rgba(80, 111, 168, 0.35);
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.md-body pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.md-body table { border-collapse: collapse; margin: 0.8em 0; }
+.md-body th, .md-body td {
+  border: 1px solid rgba(80, 111, 168, 0.4);
+  padding: 0.4em 0.8em;
+}
+.md-body th { background: rgba(80, 111, 168, 0.15); color: #fff; }
+.md-body img { max-width: 100%; border-radius: 6px; }
+.md-body hr { border: none; border-top: 1px solid rgba(80, 111, 168, 0.4); margin: 1.2em 0; }
+
+/* ============================================================
+   法务/规则文档排版(NFR-303,深色主题)
+   ============================================================ */
+.legal-prose { line-height: 1.9; font-size: 14px; color: #b3c1db; }
+.legal-prose > :first-child { margin-top: 0; }
+.legal-prose h2 {
+  font-size: 16px; font-weight: 700; color: #fff;
+  margin: 1.8em 0 0.6em; padding-bottom: 0.35em;
+  border-bottom: 1px solid rgba(80, 111, 168, 0.25);
+}
+.legal-prose h3 { font-size: 14.5px; font-weight: 600; color: #f9cd4e; margin: 1.4em 0 0.4em; }
+.legal-prose p { margin: 0.6em 0; }
+.legal-prose ul, .legal-prose ol { margin: 0.6em 0; padding-left: 1.6em; }
+.legal-prose ul { list-style: disc; }
+.legal-prose ol { list-style: decimal; }
+.legal-prose li { margin: 0.35em 0; }
+.legal-prose a { color: #f9cd4e; text-decoration: underline; text-underline-offset: 2px; }
+.legal-prose b, .legal-prose strong { color: #fff; font-weight: 600; }
+.legal-prose .ph { color: #d4a11e; background: rgba(212, 161, 30, 0.08); padding: 0 0.3em; border-radius: 3px; font-family: var(--font-mono); font-size: 0.9em; }

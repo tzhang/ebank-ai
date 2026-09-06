@@ -1080,31 +1080,6 @@ export const githubSkills: SkillItem[] = [
     mirrorUrl: "https://ghproxy.com/https://github.com/BlockRunAI/awesome-finance-mcp",
   },
 ];
-// -------- 社区 — 话题 --------
-export interface CommunityTopic {
-  id: string;
-  title: string;
-  author: string;
-  time: string;
-  replies: number;
-  views: number;
-  category: "问答" | "分享" | "讨论" | "资源";
-  lastReply: string;
-  pinned?: boolean;
-}
-
-export const communityTopics: CommunityTopic[] = [
-  { id: "1", title: "Claude Code 和 Codex 在金融数据处理的实际体验对比", author: "QuantLee", time: "2小时前", replies: 14, views: 388, category: "讨论", lastReply: "30分钟前" },
-  { id: "2", title: "分享：我用 Claude Code 写了个财报分析脚本", author: "FinanceDev", time: "5小时前", replies: 8, views: 287, category: "分享", lastReply: "1小时前" },
-  { id: "3", title: "国内银行部署 AI Agent 的 Harness 选型与合规难点讨论", author: "ComplianceWang", time: "1天前", replies: 26, views: 592, category: "讨论", lastReply: "2小时前", pinned: true },
-  { id: "4", title: "MCP 服务如何在内网环境下部署？", author: "ITSecZhang", time: "2天前", replies: 5, views: 189, category: "问答", lastReply: "12小时前" },
-  { id: "5", title: "DeepSeek 在信用评估中的应用实践", author: "CreditAnalyst", time: "3天前", replies: 15, views: 403, category: "分享", lastReply: "1天前" },
-  { id: "6", title: "自建金融大模型评测集的经验：多少样本才够？", author: "QuantDev", time: "4天前", replies: 11, views: 276, category: "问答", lastReply: "1天前" },
-  { id: "7", title: "Prompt 让大模型输出格式化金融数据", author: "DataEngineer", time: "5天前", replies: 19, views: 378, category: "讨论", lastReply: "2天前" },
-  { id: "8", title: "推荐几个金融领域好用的 Codex Skill", author: "SkillHunter", time: "6天前", replies: 11, views: 298, category: "资源", lastReply: "3天前" },
-  { id: "9", title: "Agent 权限怎么管：交易类操作要不要完全禁用？", author: "SecurityGuru", time: "1周前", replies: 31, views: 612, category: "讨论", lastReply: "4天前", pinned: true },
-  { id: "10", title: "用大模型做债券违约预测的尝试", author: "BondAnalyst", time: "1周前", replies: 9, views: 234, category: "分享", lastReply: "5天前" },
-];
 
 // 合并所有技能（自有 + GitHub 开源）
 export const allSkills: SkillItem[] = [...skillItems, ...githubSkills];
