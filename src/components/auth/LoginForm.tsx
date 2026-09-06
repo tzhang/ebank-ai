@@ -1,8 +1,10 @@
 "use client";
 
-import { useActionState } from "react";
+import { useState, useActionState } from "react";
 import Link from "next/link";
-import { loginAction, resendVerificationAction, type AuthFormState } from "@/lib/actions/auth";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { resendVerificationAction, type AuthFormState } from "@/lib/actions/auth";
 
 const initialState: AuthFormState = { error: null };
 
@@ -15,9 +17,37 @@ export default function LoginForm({
   justReset: boolean;
   justDeleted: boolean;
 }) {
-  const [state, formAction, pending] = useActionState(loginAction, initialState);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
   const [resendState, resendAction, resendPending] = useActionState(resendVerificationAction, initialState);
+  const router = useRouter();
   const showResend = Boolean(registeredEmail);
+
+  // 用客户端 signIn(redirect:false):登录成功后 SessionProvider 自动广播,
+  // 顶栏用户区即时更新(服务端动作 + 软导航会滞留游客态,故不走 action)。
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    setPending(true);
+    setError(null);
+    try {
+      const res = await signIn("credentials", {
+        email: String(fd.get("email") ?? ""),
+        password: String(fd.get("password") ?? ""),
+        redirect: false,
+      });
+      if (res?.error) {
+        setError("邮箱或密码错误");
+      } else {
+        router.replace("/");
+        router.refresh();
+      }
+    } catch {
+      setError("登录失败,请稍后再试");
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <div className="rounded-2xl border border-navy-600/60 bg-navy-800/60 p-8">
@@ -55,10 +85,10 @@ export default function LoginForm({
         </p>
       )}
 
-      <form action={formAction} className="mt-6 space-y-4">
-        {state.error && (
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        {error && (
           <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-400">
-            {state.error}
+            {error}
           </p>
         )}
         <div>

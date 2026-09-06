@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useSession } from "next-auth/react";
-import { logoutAction } from "@/lib/actions/auth";
+import { useSession, signOut } from "next-auth/react";
 import { avatarColor, avatarInitial } from "@/lib/profile-constants";
 
 const navLinks = [
@@ -26,7 +25,9 @@ export default function Navbar() {
   const isStaff = user?.role === "moderator" || user?.role === "admin";
 
   async function handleLogout() {
-    await logoutAction();
+    // 客户端 signOut:会话状态即时广播(服务端动作软导航会滞留登录态)
+    await signOut({ redirect: false });
+    window.location.href = "/";
   }
 
   const UserChip = (
