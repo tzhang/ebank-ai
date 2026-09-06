@@ -62,10 +62,22 @@ export default function RegisterPage() {
                 placeholder="至少 10 位,含字母与数字"
                 className="w-full rounded-lg border border-navy-600 bg-navy-900/60 px-3 py-2 text-white placeholder:text-navy-500 outline-none focus:border-gold-500"
               />
-              <p className="mt-1 text-xs text-navy-400">
-                注册即代表同意<a href="/terms" className="text-navy-300 underline decoration-navy-500 hover:text-gold-400">用户协议</a>与<a href="/privacy" className="text-navy-300 underline decoration-navy-500 hover:text-gold-400">隐私政策</a>(页面将于 NFR-303 issue 落地)
-              </p>
+              <p className="mt-1 text-xs text-navy-400">密码需同时包含字母与数字</p>
             </div>
+            <label className="mt-1 flex items-start gap-2 text-xs text-navy-400">
+              <input
+                type="checkbox"
+                name="agree"
+                required
+                className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-gold-500"
+              />
+              <span>
+                我已阅读并同意
+                <a href="/terms" className="text-gold-400 underline decoration-gold-500/40 underline-offset-2 hover:text-gold-300">《用户协议》</a>
+                与
+                <a href="/privacy" className="text-gold-400 underline decoration-gold-500/40 underline-offset-2 hover:text-gold-300">《隐私政策》</a>
+              </span>
+            </label>
             <button
               type="submit"
               disabled={pending}

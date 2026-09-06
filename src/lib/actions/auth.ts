@@ -42,6 +42,9 @@ export async function registerAction(
   _prev: AuthFormState,
   formData: FormData,
 ): Promise<AuthFormState> {
+  if (formData.get("agree") !== "on") {
+    return { error: "请先阅读并同意《用户协议》与《隐私政策》" };
+  }
   const email = formData.get("email");
   const result = await registerUser({
     name: formData.get("name"),

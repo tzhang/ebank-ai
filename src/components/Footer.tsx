@@ -41,6 +41,12 @@ export default function Footer() {
             <ul className="space-y-2">
               <li><Link href="/about" className="text-sm text-navy-200 transition-colors hover:text-gold-300">关于我们</Link></li>
               <li><span className="text-sm text-navy-400">hello@ebank.ai</span></li>
+              <li>
+                <Link href="/terms" className="text-sm text-navy-200 transition-colors hover:text-gold-300">用户协议</Link>
+                <span className="mx-1.5 text-navy-600">·</span>
+                <Link href="/privacy" className="text-sm text-navy-200 transition-colors hover:text-gold-300">隐私政策</Link>
+              </li>
+              <li><Link href="/rules" className="text-sm text-navy-200 transition-colors hover:text-gold-300">社区规则与举报</Link></li>
             </ul>
           </div>
         </div>
