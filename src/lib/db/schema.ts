@@ -139,9 +139,7 @@ export const reports = pgTable(
     id: text("id").primaryKey().$defaultFn(() => randomUUID()),
     targetType: text("target_type").notNull(), // topic / reply
     targetId: text("target_id").notNull(),
-    reporterId: text("reporter_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+    reporterId: text("reporter_id").references(() => users.id, { onDelete: "set null" }), // 注销时匿名保留快照(NFR-305)
     reason: text("reason"),
     contentSnapshot: text("content_snapshot"), // 被举报内容快照,处理时不依赖原文是否已删
     status: text("status").notNull().default("pending"), // pending / resolved / dismissed

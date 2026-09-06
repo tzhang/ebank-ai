@@ -9,9 +9,11 @@ const initialState: AuthFormState = { error: null };
 export default function LoginForm({
   registeredEmail,
   justReset,
+  justDeleted,
 }: {
   registeredEmail: string | null;
   justReset: boolean;
+  justDeleted: boolean;
 }) {
   const [state, formAction, pending] = useActionState(loginAction, initialState);
   const [resendState, resendAction, resendPending] = useActionState(resendVerificationAction, initialState);
@@ -45,6 +47,11 @@ export default function LoginForm({
       {justReset && (
         <p className="mt-5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
           密码已重置,请用新密码登录
+        </p>
+      )}
+      {justDeleted && (
+        <p className="mt-5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-300">
+          账号已注销,感谢你曾来过——同一邮箱随时可以重新注册。
         </p>
       )}
 

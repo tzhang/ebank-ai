@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import AuthProvider from "@/components/AuthProvider";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -27,9 +28,11 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`${inter.variable} bg-navy-900`}>
       <body className="flex min-h-screen flex-col bg-navy-900 text-navy-100 antialiased font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <AuthProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
