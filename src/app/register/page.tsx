@@ -71,7 +71,7 @@ export default function RegisterPage() {
               disabled={pending}
               className="w-full rounded-xl bg-gradient-to-r from-gold-400 to-gold-500 px-5 py-2.5 text-sm font-semibold text-navy-900 shadow-lg transition-all hover:brightness-110 disabled:opacity-50"
             >
-              {pending ? "注册中…" : "注册并登录"}
+              {pending ? "注册中…" : "注册"}
             </button>
           </form>
         </div>
