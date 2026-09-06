@@ -11,6 +11,7 @@ import ReplyForm from "@/components/forum/ReplyForm";
 import ReplyActions from "@/components/forum/ReplyActions";
 import OwnerTopicControls from "@/components/forum/OwnerTopicControls";
 import ReportButton from "@/components/forum/ReportButton";
+import StaffDeleteReply from "@/components/admin/StaffDeleteReply";
 import ViewTracker from "@/components/forum/ViewTracker";
 import LikeButton from "@/components/forum/LikeButton";
 
@@ -110,6 +111,7 @@ export default async function TopicDetailPage({
     : [];
   const verified = Boolean(me?.emailVerified);
   const isOwner = Boolean(user && topic.authorId === user.id);
+  const isStaff = user?.role === "moderator" || user?.role === "admin";
   let liked = false;
   if (user) {
     const [row] = await db
@@ -253,7 +255,10 @@ export default async function TopicDetailPage({
                   {user && floor.authorId === user.id ? (
                     <ReplyActions topicId={id} replyId={floor.id} initialContent={floor.content} />
                   ) : user ? (
-                    <ReportButton targetType="reply" targetId={floor.id} compact />
+                    <>
+                      <ReportButton targetType="reply" targetId={floor.id} compact />
+                      {isStaff && <StaffDeleteReply topicId={id} replyId={floor.id} />}
+                    </>
                   ) : null}
                 </div>
                 {kids.length > 0 && (
@@ -268,11 +273,14 @@ export default async function TopicDetailPage({
                           <Markdown>{c.content}</Markdown>
                         </div>
                         {user && (
-                          <div className="mt-1">
+                          <div className="mt-1 flex items-center gap-4">
                             {c.authorId === user.id ? (
                               <ReplyActions topicId={id} replyId={c.id} initialContent={c.content} />
                             ) : (
-                              <ReportButton targetType="reply" targetId={c.id} compact />
+                              <>
+                                <ReportButton targetType="reply" targetId={c.id} compact />
+                                {isStaff && <StaffDeleteReply topicId={id} replyId={c.id} />}
+                              </>
                             )}
                           </div>
                         )}

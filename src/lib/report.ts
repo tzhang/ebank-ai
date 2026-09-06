@@ -1,6 +1,7 @@
 import { and, eq, isNull } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { topics, replies, reports } from "@/lib/db/schema";
+import { checkUserWritable } from "@/lib/access";
 
 // M1 FRM-136 — 举报(话题 / 回复)。
 // - 登录即可举报(未登录 401);每用户每内容一次(DB 唯一索引兜底);
@@ -9,7 +10,7 @@ import { topics, replies, reports } from "@/lib/db/schema";
 
 export type ReportResult =
   | { ok: true }
-  | { ok: false; status: 401 | 404 | 409 | 422; error: string };
+  | { ok: false; status: 401 | 403 | 404 | 409 | 422; error: string };
 
 const REASON_MAX = 200;
 
@@ -21,6 +22,9 @@ export async function createReport(
   const targetId = typeof raw.targetId === "string" ? raw.targetId : "";
   const reason =
     typeof raw.reason === "string" && raw.reason.trim() ? raw.reason.trim().slice(0, REASON_MAX) : null;
+
+  const writable = await checkUserWritable(actor.userId);
+  if (!writable.ok) return writable;
 
   if (targetType !== "topic" && targetType !== "reply") {
     return { ok: false, status: 422, error: "举报对象类型不合法" };

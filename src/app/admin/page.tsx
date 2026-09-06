@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { eq, sql } from "drizzle-orm";
 import { requireRole } from "@/lib/session";
+import { getDb } from "@/lib/db";
+import { reports } from "@/lib/db/schema";
 
-// M1 ADM-120 — 管理后台首页(骨架)。
+// M1 ADM-120 — 管理后台首页。
 // 鉴权:中间件拦未登录(/admin),本页叠加角色校验(moderator / admin)。
-// 用户管理 / 内容与举报队列分别随 ADM-121 / ADM-122 落地。
-
 export default async function AdminPage() {
   const staff = await requireRole("moderator", "admin");
 
@@ -20,10 +21,27 @@ export default async function AdminPage() {
     );
   }
 
+  const db = getDb();
+  const [pendingRow] = await db
+    .select({ value: sql<number>`count(*)` })
+    .from(reports)
+    .where(eq(reports.status, "pending"));
+  const pending = pendingRow?.value ?? 0;
+
   const modules = [
-    { key: "users", title: "用户管理", desc: "搜索、封禁 / 解封,操作全程审计", eta: "ADM-121 · 待落地" },
-    { key: "content", title: "内容与举报", desc: "置顶 / 加精 / 锁帖 / 删除,举报队列处理", eta: "ADM-122 · 待落地" },
-    { key: "dashboard", title: "运营看板", desc: "注册、日活、发帖、工作坊用量与成本", eta: "ADM-123 · P1" },
+    { href: "/admin/users", title: "用户管理", desc: "搜索、封禁 / 解封,操作全程审计", badge: null },
+    {
+      href: "/admin/content",
+      title: "内容管理",
+      desc: "置顶 / 加精 / 锁帖 / 删除 / 恢复话题",
+      badge: null,
+    },
+    {
+      href: "/admin/reports",
+      title: "举报队列",
+      desc: "处理举报:删除违规内容或驳回",
+      badge: pending,
+    },
   ];
 
   return (
@@ -41,13 +59,21 @@ export default async function AdminPage() {
 
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {modules.map((m) => (
-            <div key={m.key} className="rounded-xl border border-navy-600/50 bg-navy-800/50 p-5">
-              <h2 className="font-semibold text-white">{m.title}</h2>
+            <Link
+              key={m.href}
+              href={m.href}
+              className="rounded-xl border border-navy-600/50 bg-navy-800/50 p-5 transition-colors hover:border-gold-500/40"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="font-semibold text-white">{m.title}</h2>
+                {m.badge != null && m.badge > 0 && (
+                  <span className="rounded-full bg-red-500/15 px-2 py-0.5 font-mono text-[11px] text-red-400">
+                    {m.badge} 待处理
+                  </span>
+                )}
+              </div>
               <p className="mt-2 text-sm leading-relaxed text-navy-300">{m.desc}</p>
-              <p className="mt-4 inline-flex rounded-full border border-navy-600 px-2.5 py-0.5 font-mono text-[10px] text-navy-400">
-                {m.eta}
-              </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

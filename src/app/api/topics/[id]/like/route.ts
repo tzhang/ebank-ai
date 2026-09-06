@@ -3,11 +3,14 @@ import { and, eq, isNull, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { topics, topicLikes } from "@/lib/db/schema";
 import { requireUser } from "@/lib/session";
+import { checkUserWritable } from "@/lib/access";
 
-// M1 FRM-133 — 点赞 toggle:登录即可(未登录 401;点赞不要求邮箱已验证)。
+// M1 FRM-133 — 点赞 toggle:登录即可(未登录 401);封禁用户不可操作(ADM-121)。
 export async function POST(_req: Request, ctx: { params: Promise<{ id: string }> }) {
   const user = await requireUser();
   if (!user) return NextResponse.json({ error: "请先登录" }, { status: 401 });
+  const writable = await checkUserWritable(user.id);
+  if (!writable.ok) return NextResponse.json({ error: writable.error }, { status: 403 });
   const { id } = await ctx.params;
   const db = getDb();
 

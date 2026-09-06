@@ -2,6 +2,7 @@ import { and, eq, isNull, sql } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { topics, replies, users } from "@/lib/db/schema";
 import { checkSensitive } from "@/lib/censor";
+import { checkUserWritable } from "@/lib/access";
 import {
   CATEGORIES,
   REPLY_CONTENT_MAX,
@@ -22,8 +23,10 @@ interface Actor {
   userId: string;
 }
 
-/** 发帖门槛检查:返回 null 表示通过,否则为拒绝原因 */
+/** 发帖门槛检查:封禁(ADM-121)→ 邮箱未验证(AUTH-102),任一不满足即拒绝 */
 async function checkActorCanPost(actor: Actor): Promise<{ ok: true } | { ok: false; status: 403; error: string }> {
+  const writable = await checkUserWritable(actor.userId);
+  if (!writable.ok) return writable;
   const db = getDb();
   const [row] = await db
     .select({ emailVerified: users.emailVerified })
@@ -150,6 +153,8 @@ export async function updateTopic(
   actor: Actor,
   raw: { topicId: unknown; title: unknown; content: unknown; category: unknown },
 ): Promise<ForumResult> {
+  const writable = await checkUserWritable(actor.userId);
+  if (!writable.ok) return writable;
   const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
   const owned = await assertTopicOwned(actor, topicId);
   if (!owned.ok) return owned;
@@ -177,6 +182,8 @@ export async function updateTopic(
 }
 
 export async function deleteTopic(actor: Actor, raw: { topicId: unknown }): Promise<ForumResult> {
+  const writable = await checkUserWritable(actor.userId);
+  if (!writable.ok) return writable;
   const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
   const owned = await assertTopicOwned(actor, topicId);
   if (!owned.ok) return owned;
@@ -209,7 +216,9 @@ export async function updateReply(
   actor: Actor,
   raw: { topicId: unknown; replyId: unknown; content: unknown },
 ): Promise<ForumResult> {
-  const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
+  const writable = await checkUserWritable(actor.userId);
+  if (!writable.ok) return writable;
+    const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
   const replyId = typeof raw.replyId === "string" ? raw.replyId : "";
   const owned = await assertReplyOwned(actor, topicId, replyId);
   if (!owned.ok) return owned;
@@ -233,7 +242,9 @@ export async function deleteReply(
   actor: Actor,
   raw: { topicId: unknown; replyId: unknown },
 ): Promise<ForumResult> {
-  const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
+  const writable = await checkUserWritable(actor.userId);
+  if (!writable.ok) return writable;
+    const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
   const replyId = typeof raw.replyId === "string" ? raw.replyId : "";
   const owned = await assertReplyOwned(actor, topicId, replyId);
   if (!owned.ok) return owned;
