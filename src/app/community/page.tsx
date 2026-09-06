@@ -148,9 +148,15 @@ export default async function CommunityPage({
               </Link>
             ))}
           </div>
-          <span className="inline-flex items-center gap-1.5 self-start text-xs text-navy-400 sm:self-auto">
-            <span className="text-navy-500">发起话题功能即将上线</span>
-          </span>
+          <Link
+            href="/topics/new"
+            className="inline-flex items-center self-start rounded-xl bg-gradient-to-r from-gold-400 to-gold-500 px-5 py-2 text-sm font-semibold text-navy-900 shadow-lg transition-all hover:brightness-110 sm:self-auto"
+          >
+            <svg className="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            发起话题
+          </Link>
         </div>
 
         {/* Topic list */}
@@ -172,9 +178,10 @@ export default async function CommunityPage({
             </div>
           ) : (
             rows.map((topic, idx) => (
-              <div
+              <Link
                 key={topic.id}
-                className={`px-5 py-4 transition-colors hover:bg-navy-700/30 ${
+                href={`/topics/${topic.id}`}
+                className={`block px-5 py-4 transition-colors hover:bg-navy-700/30 ${
                   idx !== rows.length - 1 ? "border-b border-navy-700/50" : ""
                 }`}
               >
@@ -216,7 +223,7 @@ export default async function CommunityPage({
                     <span>{topic.likeCount}</span>
                   </span>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>
