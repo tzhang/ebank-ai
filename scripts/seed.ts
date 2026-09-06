@@ -5,7 +5,10 @@
 // ============================================================
 import { sql } from "drizzle-orm";
 import { getDb } from "../src/lib/db";
-import { users, topics } from "../src/lib/db/schema";
+import { users, topics, bannedWords } from "../src/lib/db/schema";
+
+// 敏感词样例库(FRM-136)——正式词库由管理端维护
+const BANNED_TERMS = ["示例违禁词", "test-banned-term"];
 
 const EDITORIAL_ID = "u_seed_editorial";
 const EDITORIAL_EMAIL = "editorial@ebank.ai";
@@ -128,6 +131,11 @@ async function main() {
       .onConflictDoNothing();
   }
   console.log(`seed: 话题写入完成(${SEED_TOPICS.length} 条,幂等)`);
+
+  console.log("seed: 写入敏感词样例库…");
+  for (const term of BANNED_TERMS) {
+    await db.insert(bannedWords).values({ term }).onConflictDoNothing();
+  }
 
   const [{ count }] = await db.select({ count: sql<number>`count(*)` }).from(topics);
   console.log(`seed: 话题总数 = ${count}`);
