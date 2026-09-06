@@ -127,3 +127,128 @@ export async function createReply(
   });
   return { ok: true };
 }
+
+// ============================================================
+// M1 FRM-132 — 编辑 / 软删除自己的内容(所有权校验)
+// ============================================================
+
+async function assertTopicOwned(actor: Actor, topicId: string) {
+  const db = getDb();
+  const [t] = await db
+    .select({ authorId: topics.authorId })
+    .from(topics)
+    .where(and(eq(topics.id, topicId), isNull(topics.deletedAt)))
+    .limit(1);
+  if (!t) return { ok: false as const, status: 404 as const, error: "话题不存在或已删除" };
+  if (t.authorId !== actor.userId) {
+    return { ok: false as const, status: 403 as const, error: "只能操作自己的话题" };
+  }
+  return { ok: true as const };
+}
+
+export async function updateTopic(
+  actor: Actor,
+  raw: { topicId: unknown; title: unknown; content: unknown; category: unknown },
+): Promise<ForumResult> {
+  const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
+  const owned = await assertTopicOwned(actor, topicId);
+  if (!owned.ok) return owned;
+
+  const title = typeof raw.title === "string" ? raw.title.trim() : "";
+  const content = typeof raw.content === "string" ? raw.content.trim() : "";
+  const category = raw.category as Category;
+
+  if (title.length < TOPIC_TITLE_MIN || title.length > TOPIC_TITLE_MAX) {
+    return { ok: false, status: 422, error: `标题需为 ${TOPIC_TITLE_MIN}–${TOPIC_TITLE_MAX} 个字符` };
+  }
+  if (content.length === 0 || content.length > TOPIC_CONTENT_MAX) {
+    return { ok: false, status: 422, error: `正文需为 1–${TOPIC_CONTENT_MAX} 个字符` };
+  }
+  if (!CATEGORIES.includes(category)) return { ok: false, status: 422, error: "分类不合法" };
+  const hit = checkSensitive(title + "\n" + content);
+  if (hit.blocked) return { ok: false, status: 422, error: "内容包含违禁词,请修改后重试" };
+
+  const db = getDb();
+  await db
+    .update(topics)
+    .set({ title, content, category, updatedAt: sql`now()` })
+    .where(eq(topics.id, topicId));
+  return { ok: true, topicId };
+}
+
+export async function deleteTopic(actor: Actor, raw: { topicId: unknown }): Promise<ForumResult> {
+  const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
+  const owned = await assertTopicOwned(actor, topicId);
+  if (!owned.ok) return owned;
+
+  const db = getDb();
+  await db
+    .update(topics)
+    .set({ deletedAt: sql`now()` })
+    .where(eq(topics.id, topicId));
+  return { ok: true };
+}
+
+async function assertReplyOwned(actor: Actor, topicId: string, replyId: string) {
+  const db = getDb();
+  const [r] = await db
+    .select({ authorId: replies.authorId, topicId: replies.topicId })
+    .from(replies)
+    .where(and(eq(replies.id, replyId), isNull(replies.deletedAt)))
+    .limit(1);
+  if (!r || r.topicId !== topicId) {
+    return { ok: false as const, status: 404 as const, error: "回复不存在或已删除" };
+  }
+  if (r.authorId !== actor.userId) {
+    return { ok: false as const, status: 403 as const, error: "只能操作自己的回复" };
+  }
+  return { ok: true as const };
+}
+
+export async function updateReply(
+  actor: Actor,
+  raw: { topicId: unknown; replyId: unknown; content: unknown },
+): Promise<ForumResult> {
+  const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
+  const replyId = typeof raw.replyId === "string" ? raw.replyId : "";
+  const owned = await assertReplyOwned(actor, topicId, replyId);
+  if (!owned.ok) return owned;
+
+  const content = typeof raw.content === "string" ? raw.content.trim() : "";
+  if (content.length === 0 || content.length > REPLY_CONTENT_MAX) {
+    return { ok: false, status: 422, error: `回复需为 1–${REPLY_CONTENT_MAX} 个字符` };
+  }
+  const hit = checkSensitive(content);
+  if (hit.blocked) return { ok: false, status: 422, error: "内容包含违禁词,请修改后重试" };
+
+  const db = getDb();
+  await db
+    .update(replies)
+    .set({ content, updatedAt: sql`now()` })
+    .where(eq(replies.id, replyId));
+  return { ok: true };
+}
+
+export async function deleteReply(
+  actor: Actor,
+  raw: { topicId: unknown; replyId: unknown },
+): Promise<ForumResult> {
+  const topicId = typeof raw.topicId === "string" ? raw.topicId : "";
+  const replyId = typeof raw.replyId === "string" ? raw.replyId : "";
+  const owned = await assertReplyOwned(actor, topicId, replyId);
+  if (!owned.ok) return owned;
+
+  const db = getDb();
+  // 软删除 + replyCount 冗余计数回退,同事务保证一致
+  await db.transaction(async (tx) => {
+    await tx
+      .update(replies)
+      .set({ deletedAt: sql`now()` })
+      .where(eq(replies.id, replyId));
+    await tx
+      .update(topics)
+      .set({ replyCount: sql`greatest(${topics.replyCount} - 1, 0)` })
+      .where(eq(topics.id, topicId));
+  });
+  return { ok: true };
+}
