@@ -4,6 +4,10 @@ import type { NextAuthConfig } from "next-auth";
 // 注意:此文件不得 import 任何 Node 运行时依赖(pg 等)——middleware 跑在 Edge。
 // 带数据库 adapter 的完整配置见 src/auth.ts(server-only)。
 export const authConfig = {
+  pages: {
+    signIn: "/login",
+    error: "/login", // OAuth 错误(如 OAuthAccountNotLinked)经 ?error=<code> 回到登录页
+  },
   session: { strategy: "jwt" },
   // providers 后续 issue 填充:
   // - M1 AUTH-105:GitHub(GitHub({ clientId, clientSecret }))
