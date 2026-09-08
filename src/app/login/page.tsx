@@ -18,6 +18,8 @@ export default async function LoginPage({
   const justReset = !Array.isArray(sp.reset) && sp.reset === "1";
   const justDeleted = !Array.isArray(sp.deleted) && sp.deleted === "1";
   const errorCode = Array.isArray(sp.error) ? sp.error[0] : (sp.error ?? null);
+  // 服务端 env 决定是否展示 GitHub 登录(未配置的部署不渲染按钮)
+  const hasGithub = Boolean(process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET);
 
   return (
     <section className="min-h-[70vh] border-b border-navy-700/50 bg-gradient-to-b from-navy-800 to-navy-900 py-16">
@@ -27,6 +29,7 @@ export default async function LoginPage({
           justReset={justReset}
           justDeleted={justDeleted}
           errorCode={errorCode}
+          hasGithub={hasGithub}
         />
       </div>
     </section>
