@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { registerAction, type AuthFormState } from "@/lib/actions/auth";
+import TurnstileWidget from "@/components/auth/TurnstileWidget";
 
 const initialState: AuthFormState = { error: null };
 
@@ -78,6 +79,8 @@ export default function RegisterPage() {
                 <a href="/privacy" className="text-gold-400 underline decoration-gold-500/40 underline-offset-2 hover:text-gold-300">《隐私政策》</a>
               </span>
             </label>
+            {/* AUTH-106:Site Key 未配置时不渲染任何内容(休眠态) */}
+            <TurnstileWidget />
             <button
               type="submit"
               disabled={pending}
