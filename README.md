@@ -45,6 +45,11 @@ cp .env.example .env   # 填入 DATABASE_URL 等(参见文件注释)
 npm run db:generate    # schema → 迁移 SQL
 npm run db:migrate     # 应用迁移(tsx 执行器,supavisor 兼容)
 npm run db:seed        # 幂等种子数据(编辑部账号 + 10 话题 + 敏感词样例)
+# 注:db:migrate / db:seed 已带 --env-file=.env(此前裸 tsx 不读 .env,会报 DATABASE_URL 未配置)
+
+# 测试
+npm test                                          # 单元测试(纯函数,不依赖数据库)
+DATABASE_URL=<开发库连接串> RATE_LIMIT_TEST_DB=1 npm test   # 追加限流集成测试(读写 rate_limits,务必指向开发库)
 
 # 本地开发
 npm run dev
@@ -59,4 +64,5 @@ npm run dev
 - 用户:注册(邮箱验证)、登录(邮箱密码 / GitHub OAuth)、找回密码、个人资料、注销(举报快照匿名保留)
 - 社区:话题 CRUD、Markdown、楼层 + 楼中楼、点赞、浏览计数、敏感词库(DB + 缓存)、举报队列
 - 管理后台(/admin,moderator+):用户封禁(全站只读)、内容置顶/加精/锁帖/删除/恢复、举报处理、审计日志(仅追加)
+- 反滥用:注册 / 登录 / 找回密码 / 重发验证 按 IP 与邮箱双维度限流(阈值见 `src/lib/rate-limit.ts` 的 POLICIES);注册表单 Cloudflare Turnstile 人机校验(未配置密钥即休眠,配好自动生效——获取步骤见 `.env.example`)
 - 合规:用户协议 / 隐私政策 / 社区规则(草案,待法律审阅);生产配置清单见 PRD §五与 Issue #21

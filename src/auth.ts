@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
@@ -7,6 +7,13 @@ import { authConfig } from "@/auth.config";
 import { getDb } from "@/lib/db";
 import { users, accounts, sessions, verificationTokens } from "@/lib/db/schema";
 import { verifyPassword } from "@/lib/password";
+import { consumeAll, getClientIp, POLICIES } from "@/lib/rate-limit";
+
+// M1 AUTH-106 — 登录限流信号:code 会进入 ?error=CredentialsSignin&code=… ,
+// 由 loginAction 识别并给出与「密码错误」不同的提示(不含敏感信息)。
+class RateLimitedSignin extends CredentialsSignin {
+  code = "rate_limited";
+}
 
 // M1 INF-002 + AUTH-101/103/105 — Auth.js v5 完整配置(server-only)。
 // - Credentials/GitHub provider 只能在此(带 DB),middleware 用的是 edge-safe 的 auth.config;
@@ -63,10 +70,20 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Credentials({
       name: "邮箱密码",
       credentials: { email: {}, password: {} },
-      async authorize(credentials) {
+      async authorize(credentials, request) {
         const email = typeof credentials.email === "string" ? credentials.email.trim().toLowerCase() : "";
         const password = typeof credentials.password === "string" ? credentials.password : "";
         if (!email || !password) return null;
+
+        // AUTH-106:密码校验之前限流 —— 邮箱维度挡定点爆破,IP 维度挡弱口令扫描。
+        // request 由 Auth.js 用 next/headers 的真实请求头构造(next-auth/lib/actions.js),
+        // Server Action 路径同样带有 x-forwarded-for。
+        const limit = await consumeAll([
+          [POLICIES.loginEmail, email],
+          [POLICIES.loginIp, getClientIp(request.headers)],
+        ]);
+        if (!limit.ok) throw new RateLimitedSignin();
+
         const db = getDb();
         const [user] = await db
           .select()

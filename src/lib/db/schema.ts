@@ -177,6 +177,20 @@ export const auditLogs = pgTable(
   (t) => [index("audit_logs_actor_idx").on(t.actorId, t.createdAt)],
 );
 
+// 频率限制(AUTH-106 / NFR-302):定点窗口计数器。
+// - key = sha256(pepper|scope|identifier),不落明文 IP / 邮箱(PIPL 最小化);
+// - 单条 INSERT ... ON CONFLICT DO UPDATE 原子自增,Serverless 多实例并发无竞态;
+// - 行过期由应用层机会式清理(src/lib/rate-limit.ts),window_start 索引支撑。
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    key: text("key").primaryKey(),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [index("rate_limits_window_idx").on(t.windowStart)],
+);
+
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Topic = typeof topics.$inferSelect;
