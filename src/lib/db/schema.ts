@@ -165,7 +165,7 @@ export const auditLogs = pgTable(
   "audit_logs",
   {
     id: text("id").primaryKey().$defaultFn(() => randomUUID()),
-    actorId: text("actor_id").references(() => users.id, { onDelete: "set null" }), // 管理员操作人;系统动作可空
+    actorId: text("actor_id").references(() => users.id, { onDelete: "set null" }), // 操作人(管理/合规动作);系统动作可空
     action: text("action").notNull(), // 如 ban_user / pin_topic / delete_topic / handle_report
     targetType: text("target_type"),
     targetId: text("target_id"),

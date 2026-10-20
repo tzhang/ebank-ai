@@ -1,7 +1,7 @@
 import { getDb } from "@/lib/db";
 import { auditLogs } from "@/lib/db/schema";
 
-// M1 ADM-124 — 审计日志(仅追加;由管理操作统一调用,禁止其他路径写 audit_logs)。
+// M1 ADM-124 — 审计日志(仅追加;由管理动作与 PIB 合规动作统一调用,禁止其他路径写 audit_logs)。
 export async function appendAudit(input: {
   actorId: string;
   action: string;
