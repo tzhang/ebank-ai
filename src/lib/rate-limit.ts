@@ -27,6 +27,9 @@ export const POLICIES = {
   resetIp: { scope: "reset:ip", limit: 10, windowSec: 3600 },
   resendEmail: { scope: "resend:email", limit: 3, windowSec: 3600 },
   resendIp: { scope: "resend:ip", limit: 10, windowSec: 3600 },
+  // PIB 集成 (Phase B): 防止登录用户刷周期/刷批准
+  pibRunUser: { scope: "pib:run:user", limit: 6, windowSec: 3600 },
+  pibActionUser: { scope: "pib:action:user", limit: 60, windowSec: 3600 },
 } as const satisfies Record<string, RateLimitPolicy>;
 
 export type RateLimitResult =

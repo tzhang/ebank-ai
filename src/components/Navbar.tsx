@@ -56,6 +56,13 @@ export default function Navbar() {
                 </div>
                 <div className="py-1">
                   <Link
+                    href="/portfolio"
+                    onClick={() => setUserOpen(false)}
+                    className="block px-4 py-2 text-xs text-navy-100 hover:bg-navy-700"
+                  >
+                    投资组合
+                  </Link>
+                  <Link
                     href="/account"
                     onClick={() => setUserOpen(false)}
                     className="block px-4 py-2 text-xs text-navy-100 hover:bg-navy-700"
@@ -179,6 +186,9 @@ export default function Navbar() {
             <div className="border-t border-navy-700/50 pt-2">
               {user ? (
                 <>
+                  <Link href="/portfolio" onClick={() => setMobileOpen(false)} className="block rounded-lg px-3 py-2 text-sm text-navy-200 hover:bg-navy-700 hover:text-white">
+                    投资组合
+                  </Link>
                   <Link href="/account" onClick={() => setMobileOpen(false)} className="block rounded-lg px-3 py-2 text-sm text-navy-200 hover:bg-navy-700 hover:text-white">
                     个人资料
                   </Link>
